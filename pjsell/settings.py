@@ -4,13 +4,13 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 🔐 SECRET_KEY via variável de ambiente
-SECRET_KEY = os.environ.get('SECRET_KEY', 'default-insecure-key')  # Para evitar erro em DEBUG local
+SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-key")  # Para evitar erro em DEBUG local
 
 # 🔒 Segurança em produção
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 # 🌐 Permitido apenas no domínio do Render
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 # 📦 Aplicativos instalados
 INSTALLED_APPS = [
