@@ -3,12 +3,16 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+# 🔐 SECRET_KEY via variável de ambiente
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default-insecure-key')  # Para evitar erro em DEBUG local
 
+# 🔒 Segurança em produção
 DEBUG = False
 
+# 🌐 Permitido apenas no domínio do Render
 ALLOWED_HOSTS = ['.onrender.com']
 
+# 📦 Aplicativos instalados
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -20,9 +24,10 @@ INSTALLED_APPS = [
     "usuarios",
 ]
 
+# 🔒 Middlewares com Whitenoise para arquivos estáticos
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # 🔁 Aqui entra o Whitenoise
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -33,6 +38,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'pjsell.urls'
 
+# 🎨 Templates
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -40,6 +46,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -50,13 +57,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pjsell.wsgi.application'
 
+# 🗃️ Banco de dados SQLite (Render aceita, mas cuidado com persistência)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, 'data', 'db.sqlite3'),
+        "NAME": BASE_DIR / 'db.sqlite3',  # ✅ não precisa mover para /data/ (a menos que você tenha)
     }
 }
 
+# 🔐 Validação de senha
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -72,21 +81,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = "en-us"
-
+# 🌎 Localização
+LANGUAGE_CODE = "pt-br"
 TIME_ZONE = 'America/Sao_Paulo'
-
 USE_I18N = True
 USE_TZ = True
 
-# STATIC CONFIG
+# 📂 Arquivos estáticos (com Whitenoise)
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# 🔄 Auto Field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# 🔑 Autenticação
 LOGIN_URL = '/usuarios/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/usuarios/login/'

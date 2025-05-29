@@ -12,6 +12,5 @@ urlpatterns = [
     path('cancelar/<int:relatorio_id>/', views.cancelar_agendamento, name='cancelar_agendamento'),
     path('pesquisar/', views.pesquisar, name='pesquisar'),
     path('supervisor/', views.painel_superusuario, name='painel_superusuario'),
-    path('', views.home, name='home'),
-
+    
 ]
