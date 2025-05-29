@@ -1,5 +1,7 @@
 from pathlib import Path
 import os
+import dj_database_url
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -59,11 +61,8 @@ WSGI_APPLICATION = 'pjsell.wsgi.application'
 
 # 🗃️ Banco de dados SQLite (Render aceita, mas cuidado com persistência)
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / 'db.sqlite3',  # ✅ não precisa mover para /data/ (a menos que você tenha)
+    "default": dj_database_url.config(default=os.environ.get("DATABASE_URL"))
     }
-}
 
 # 🔐 Validação de senha
 AUTH_PASSWORD_VALIDATORS = [
