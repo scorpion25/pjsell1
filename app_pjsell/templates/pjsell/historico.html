@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Histórico de Envio</title>
+
+  <!-- TailwindCSS + FontAwesome + Flatpickr -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+</head>
+<body class="bg-cover bg-center bg-no-repeat min-h-screen p-6" style="background-image: url('/static/images/nknm.png')">
+
+  <div class="max-w-6xl mx-auto bg-white bg-opacity-95 p-6 rounded-xl shadow-md">
+
+    <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">
+      <i class="fas fa-history mr-2 text-blue-600"></i>Histórico de Envio
+    </h1>
+
+    <!-- Voltar -->
+    <div class="text-center mb-6">
+      <a href="{% url 'painel' %}">
+        <button class="inline-flex items-center px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg">
+          <i class="fas fa-arrow-left mr-2"></i> Voltar ao Painel
+        </button>
+      </a>
+    </div>
+
+    <!-- Filtro por data -->
+    <form method="get" class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center mb-6">
+      <label for="data" class="text-gray-700 font-medium">Filtrar por data:</label>
+      <input type="text" id="data" name="data" class="datepicker px-3 py-2 border rounded-md w-48" value="{{ data_selecionada }}">
+      <button type="submit"
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium">
+        <i class="fas fa-filter mr-1"></i> Filtrar
+      </button>
+    </form>
+
+    <!-- Tabela -->
+    {% if contatos %}
+    <div class="overflow-auto">
+      <table class="w-full text-sm border border-gray-200 shadow-sm bg-white rounded-lg">
+        <thead class="bg-blue-600 text-white">
+          <tr>
+            <th class="py-3 px-2">Número</th>
+            <th class="py-3 px-2">PON</th>
+            <th class="py-3 px-2">Data M1</th>
+            <th class="py-3 px-2">Data M2</th>
+            <th class="py-3 px-2">Data M3</th>
+            <th class="py-3 px-2">Funcionário</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          {% for contato in contatos %}
+          <tr class="hover:bg-gray-100">
+            <td class="py-2 px-2">{{ contato.numero }}</td>
+            <td class="py-2 px-2">{{ contato.pon }}</td>
+            <td class="py-2 px-2">{{ contato.data_m1|date:"d/m/Y H:i" }}</td>
+            <td class="py-2 px-2">
+              {% if contato.data_m2 %}
+                {{ contato.data_m2|date:"d/m/Y H:i" }}
+              {% else %}
+                <span class="text-gray-400">-</span>
+              {% endif %}
+            </td>
+            <td class="py-2 px-2">
+              {% if contato.data_m3 %}
+                {{ contato.data_m3|date:"d/m/Y H:i" }}
+              {% else %}
+                <span class="text-gray-400">-</span>
+              {% endif %}
+            </td>
+            <td class="py-2 px-2">{{ contato.funcionario.username }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="mt-6 text-center p-6 bg-yellow-100 border border-yellow-300 text-yellow-700 rounded-md">
+        <i class="fas fa-info-circle mr-2"></i>Nenhum registro encontrado para a data selecionada.
+      </div>
+    {% endif %}
+
+  </div>
+
+  <!-- Flatpickr -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+  <script>
+    flatpickr(".datepicker", {
+      dateFormat: "Y-m-d",
+      locale: "pt"
+    });
+  </script>
+
+</body>
+</html>

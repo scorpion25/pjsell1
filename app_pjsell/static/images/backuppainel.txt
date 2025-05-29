@@ -1,0 +1,272 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PJSell</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --cor-principal: #f19483;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('desktop.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background-image 0.4s ease;
+    }
+
+    .painel {
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid var(--cor-principal);
+      border-radius: 16px;
+      max-width: 540px;
+      width: 95%;
+      padding: 50px 40px 30px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      position: relative;
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topo span {
+      font-size: 20px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .topo b {
+      color: var(--cor-principal);
+      font-family: monospace;
+      font-weight: normal;
+    }
+
+    .logout {
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-weight: 600;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .logout:hover {
+      background-color: #e26c5c;
+    }
+
+    .botoes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .botoes button,
+    .chat-btn {
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .botoes button:hover,
+    .chat-btn:hover {
+      background-color: #1E2D4D;
+    }
+
+    .chat-btn {
+      grid-column: span 2;
+    }
+
+    .tema-btn {
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      align-self: flex-end;
+    }
+
+    .tema-btn:hover {
+      background-color: #e26c5c;
+    }
+
+    .tema-menu {
+      display: none;
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      padding: 12px;
+      width: 200px;
+      z-index: 10;
+    }
+
+    .tema-menu label {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    .tema-menu select {
+      width: 100%;
+      padding: 6px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+
+    .busca {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .busca input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 60%;
+      min-width: 180px;
+    }
+
+    .busca button {
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .busca button:hover {
+      background-color: #e26c5c;
+    }
+
+    @media (max-width: 600px) {
+      .botoes {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-btn {
+        grid-column: span 1;
+      }
+
+      .painel {
+        padding: 30px 20px;
+      }
+
+      .tema-menu {
+        right: 50%;
+        transform: translateX(50%);
+      }
+
+      .busca {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .busca input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="painel">
+    <div class="topo">
+      <span><strong>KNM</strong>, {{ usuario.username }}</span>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout">Sair</button>
+      </form>      
+    </div>
+
+    <div class="botoes">
+      <a href="{% url 'new_send' %}"><button type="button">Carregar</button></a>
+      <button type="button">Relatório</button>
+      <button type="button">Estatísticas</button>
+      <a href="{% url 'historico' %}"><button type="button">Lista</button></a>
+      <button type="button" class="chat-btn">Enviar</button>
+    </div>
+
+    <!-- 🔍 CAMPO DE PESQUISA DENTRO DO PAINEL -->
+    <form method="get" action="{% url 'historico' %}" class="busca">
+      <input type="text" name="q" placeholder="Digite o número ou PON">
+      <button type="submit">Pesquisar</button>
+    </form>
+
+    <button class="tema-btn" onclick="toggleTemaMenu()">Tema</button>
+
+    <div class="tema-menu" id="temaMenu">
+      <select id="fundo">
+        <option value="images/desktop.png|#f19483">Desktop</option>
+        <option value="claro.png|#f19483">Claro</option>
+        <option value="vivo2.png|#b47ddb">Vivo</option>
+        <option value="knm.png|#5A78A8">KNM</option>
+      </select>
+    </div>
+  </div>
+
+  <script>
+    const fundoSelect = document.getElementById('fundo');
+    const temaMenu = document.getElementById('temaMenu');
+
+    function toggleTemaMenu() {
+      temaMenu.style.display = temaMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    fundoSelect.addEventListener('change', () => {
+      const [imagem, cor] = fundoSelect.value.split('|');
+      document.body.style.backgroundImage = `url('/static/images/${imagem}')`;
+
+      document.documentElement.style.setProperty('--cor-principal', cor);
+      temaMenu.style.display = 'none';
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!temaMenu.contains(e.target) && !e.target.classList.contains('tema-btn')) {
+        temaMenu.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

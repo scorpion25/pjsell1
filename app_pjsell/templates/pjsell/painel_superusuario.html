@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% csrf_token %}
+<head>
+  <meta charset="UTF-8">
+  <title>Painel do Superusuário</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 min-h-screen px-4 pt-4">
+
+  <!-- Botão Sair no topo -->
+  <div class="flex justify-end mb-4">
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium shadow">
+        <i class="fas fa-sign-out-alt mr-1"></i>Sair
+      </button>
+    </form>
+  </div>
+
+  <!-- Painel de botões -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+    <a href="{% url 'relatorio' %}" class="block bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-lg text-center shadow-md transition">
+      <i class="fas fa-list-alt text-xl mr-2"></i>Ver Agendamentos
+    </a>
+
+    <a href="{% url 'definicoes' %}" class="block bg-yellow-500 hover:bg-yellow-600 text-white py-4 px-6 rounded-lg text-center shadow-md transition">
+      <i class="fas fa-comment-dots text-xl mr-2"></i>Mensagens Padrão
+    </a>
+
+    <a href="#" class="block bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-lg text-center shadow-md transition">
+      <i class="fas fa-user-cog text-xl mr-2"></i>Gerenciar Usuários
+    </a>
+
+    <a href="#" class="block bg-gray-700 hover:bg-gray-800 text-white py-4 px-6 rounded-lg text-center shadow-md transition">
+      <i class="fas fa-file-download text-xl mr-2"></i>Exportar Relatórios
+    </a>
+
+    <a href="{% url 'cadastro' %}" class="block bg-purple-600 hover:bg-purple-700 text-white py-4 px-6 rounded-lg text-center shadow-md transition">
+      <i class="fas fa-user-plus text-xl mr-2"></i>Cadastrar Usuário
+    </a>
+
+    <!-- Botão ADM -->
+    <a href="/admin/" class="block bg-red-600 hover:bg-red-700 text-white py-4 px-6 rounded-lg text-center shadow-md transition">
+      <i class="fas fa-tools text-xl mr-2"></i>ADM
+    </a>
+
+  </div>
+
+</body>
+</html>

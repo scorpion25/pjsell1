@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PJSell</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --cor-principal: #4164af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('/static/images/nknm.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .painel {
+      background: rgba(250, 249, 249, 0.95);
+      border: 2px solid var(--cor-principal);
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      padding: 40px 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      position: relative;
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topo span {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .topo b {
+      color: var(--cor-principal);
+      font-family: monospace;
+      font-weight: normal;
+    }
+
+    .logout {
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .logout:hover {
+      background-color: #1E2D4D;
+    }
+
+    .botoes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .botoes button,
+    .botoes a button {
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      padding: 16px 0;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .botoes button:hover,
+    .botoes a button:hover {
+      background-color: #1E2D4D;
+    }
+
+    .busca {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .busca input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .busca button {
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .busca button:hover {
+      background-color: #1E2D4D;
+    }
+
+    .tema-btn {
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      align-self: flex-end;
+      position: relative;
+    }
+
+    .tema-btn:hover {
+      background-color: #1E2D4D;
+    }
+
+    .tema-menu {
+      display: none;
+      position: absolute;
+      bottom: 60px;
+      right: 30px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      padding: 12px;
+      width: 200px;
+      z-index: 10;
+    }
+
+    .tema-menu select {
+      width: 100%;
+      padding: 6px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+
+    @media (max-width: 600px) {
+      .botoes {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .painel {
+        padding: 30px 20px;
+      }
+
+      .tema-menu {
+        right: 50%;
+        transform: translateX(50%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="painel">
+    <div class="topo">
+      <span><strong>KNM</strong>, {{ usuario.username }}</span>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout">Sair</button>
+      </form>
+    </div>
+
+    <!-- BOTÕES PRINCIPAIS -->
+    <div class="botoes">
+      <a href="{% url 'new_send' %}"><button type="button">Carregar</button></a>
+      <a href="{% url 'relatorio' %}">
+        <button class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold">
+          <i class="fas fa-file-alt mr-2"></i> Relatório
+        </button>
+      </a>
+      <button type="button">Estatísticas</button>
+      <a href="{% url 'historico' %}"><button type="button">Lista</button></a>
+      <a href="{% url 'definicoes' %}"><button type="button">Definições</button></a>
+      <a href="{% url 'enviar' %}"><button type="button">Enviar</button></a>
+    </div>    
+
+    <!-- PESQUISA -->
+    <form method="get" action="{% url 'pesquisar' %}" class="busca">
+      <input type="text" name="q" placeholder="Digite o número ou PON">
+      <button type="submit">Pesquisar</button>
+    </form>
+
+    <!-- BOTÃO TEMA -->
+    <button class="tema-btn" onclick="toggleTemaMenu()">Tema</button>
+
+    <!-- MENU TEMA -->
+    <div class="tema-menu" id="temaMenu">
+      <select id="fundo">
+      <!-- <option value="nknm.png|#f19483">Claro</option> -->
+       <!-- <option value="claro.png|#f19483">Claro</option> -->
+        <option value="vivo2.png|#b47ddb">Vivo</option> 
+        <option value="nknm.png|#5A78A8">KNM</option>
+      </select>
+    </div>
+  </div>
+
+  <script>
+    const fundoSelect = document.getElementById('fundo');
+    const temaMenu = document.getElementById('temaMenu');
+
+    function toggleTemaMenu() {
+      temaMenu.style.display = temaMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    fundoSelect.addEventListener('change', () => {
+      const [imagem, cor] = fundoSelect.value.split('|');
+      document.body.style.backgroundImage = `url('/static/images/${imagem}')`;
+      document.documentElement.style.setProperty('--cor-principal', cor);
+      temaMenu.style.display = 'none';
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!temaMenu.contains(e.target) && !e.target.classList.contains('tema-btn')) {
+        temaMenu.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

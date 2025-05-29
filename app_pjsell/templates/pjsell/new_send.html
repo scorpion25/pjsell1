@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Importar Contatos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-cover bg-center bg-no-repeat min-h-screen flex items-center justify-center px-4" style="background-image: url('/static/images/nknm.png')">
+
+  <div class="bg-white bg-opacity-95 border-2 border-blue-600 rounded-2xl shadow-xl w-full max-w-md p-8 space-y-6">
+
+    <div class="flex justify-between items-center">
+      <h2 class="text-xl font-semibold text-gray-800">
+        <i class="fas fa-file-upload mr-2 text-blue-600"></i>Importação
+      </h2>
+      <form method="post" action="{% url 'painel' %}">
+        {% csrf_token %}
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
+          <i class="fas fa-sign-out-alt mr-1"></i>Sair
+        </button>
+      </form>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="flex flex-col items-center space-y-4">
+      {% csrf_token %}
+      <label for="arquivo" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow transition text-center">
+        <i class="fas fa-folder-open mr-2"></i>Selecionar Arquivo
+        <input type="file" id="arquivo" name="arquivo" accept=".xlsx,.xls" class="hidden" onchange="this.form.submit()">
+      </label>
+    </form>
+
+    {% if nome_arquivo %}
+      <p class="text-center text-sm text-gray-700">
+        <i class="fas fa-file-alt text-blue-600 mr-1"></i>{{ nome_arquivo }}
+      </p>
+    {% endif %}
+
+    {% if sucesso %}
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative text-center" role="alert">
+        <strong class="font-bold">✅ Sucesso!</strong>
+        <span class="block sm:inline">{{ sucesso }}</span>
+      </div>
+    {% endif %}
+
+    {% if erro %}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center" role="alert">
+        <strong class="font-bold">⚠️ Erro:</strong>
+        <span class="block sm:inline">{{ erro }}</span>
+      </div>
+    {% endif %}
+
+  </div>
+
+</body>
+</html>

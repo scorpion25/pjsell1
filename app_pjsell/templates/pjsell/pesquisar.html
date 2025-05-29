@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado da Pesquisa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-cover bg-center bg-no-repeat p-6 min-h-screen" style="background-image: url('/static/images/nknm.png')">
+
+  <div class="max-w-5xl mx-auto bg-white bg-opacity-95 p-6 rounded-xl shadow-md">
+    
+    <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">
+      <i class="fas fa-search mr-2 text-blue-600"></i>Resultado da Pesquisa
+    </h1>
+
+    {% if resultado %}
+      <div class="overflow-auto">
+        <table class="w-full border border-gray-300 text-sm shadow-sm">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="py-3 px-2">Número</th>
+              <th class="py-3 px-2">PON</th>
+              <th class="py-3 px-2">Funcionário</th>
+              <th class="py-3 px-2">Data M1</th>
+              <th class="py-3 px-2">Status</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            {% for contato in resultado %}
+              <tr class="hover:bg-gray-100">
+                <td class="py-2 px-2">{{ contato.numero }}</td>
+                <td class="py-2 px-2">{{ contato.pon }}</td>
+                <td class="py-2 px-2">{{ contato.funcionario.username }}</td>
+                <td class="py-2 px-2">{{ contato.data_m1|date:"d/m/Y H:i" }}</td>
+                <td class="py-2 px-2">
+                  {% if not contato.cancelado %}
+                    <a href="{% url 'cancelar_agendamento' contato.id %}">
+                      <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-xs">
+                        Cancelar
+                      </button>
+                    </a>
+                  {% else %}
+                    <span class="text-red-500 font-semibold">Cancelado</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="mt-6 text-center p-6 bg-yellow-100 border border-yellow-300 text-yellow-700 rounded-md">
+        <i class="fas fa-info-circle mr-2"></i>Nenhum resultado encontrado para "{{ termo }}".
+      </div>
+    {% endif %}
+
+    <!-- Botão Voltar -->
+    <div class="text-center mt-6">
+      <a href="{% url 'painel' %}">
+        <button class="inline-flex items-center px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg">
+          <i class="fas fa-arrow-left mr-2"></i> Voltar ao Painel
+        </button>
+      </a>
+    </div>
+
+  </div>
+
+</body>
+</html>

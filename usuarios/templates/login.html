@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: calc(100% - 12px);
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        .form-group button {
+            background-color: #28a745; /* Cor verde para login */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background-color: #1e7e34;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Nome de Usuário:</label>
+                <input type="text" id="username" name="username" required>
+                <div class="error-message" id="usernameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+            <div class="form-group">
+                <button type="submit">Logar</button>
+            </div>
+            <div class="error-message" id="loginError"></div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            const loginError = document.getElementById('loginError');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Impede o envio padrão do formulário
+                resetErrors();
+
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value;
+
+                let isValid = true;
+
+                if (username.length < 3) {
+                    displayError(usernameError, 'O nome de usuário deve ter pelo menos 3 caracteres.');
+                    isValid = false;
+                }
+
+                if (password.length < 6) {
+                    displayError(passwordError, 'A senha deve ter pelo menos 6 caracteres.');
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    // O formulário será enviado para o backend Django para autenticação
+                    // A verificação da existência do usuário e da senha correta será feita lá.
+                    form.submit();
+                }
+            });
+
+            function displayError(element, message) {
+                element.textContent = message;
+            }
+
+            function resetErrors() {
+                usernameError.textContent = '';
+                passwordError.textContent = '';
+                loginError.textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>

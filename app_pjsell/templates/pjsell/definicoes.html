@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Definições</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-cover bg-center bg-no-repeat min-h-screen p-6" style="background-image: url('/static/images/nknm.png')">
+
+  <div class="max-w-2xl mx-auto bg-white bg-opacity-95 p-6 rounded-xl shadow-md space-y-6">
+
+    <h1 class="text-2xl font-semibold text-center text-gray-800">
+      <i class="fas fa-cogs text-blue-600 mr-2"></i>Definições do Sistema
+    </h1>
+
+    <!-- Ações -->
+    <div class="flex justify-center gap-4 mb-4">
+      <a href="{% url 'painel' %}">
+        <button class="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium shadow">
+          <i class="fas fa-arrow-left"></i> Voltar ao Painel
+        </button>
+      </a>
+      <a href="{% url 'resumo_config' %}">
+        <button class="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium shadow">
+          <i class="fas fa-list"></i> Resumo
+        </button>
+      </a>
+    </div>
+
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- Mensagem 1 -->
+      <div>
+        <label class="block text-lg font-semibold text-gray-700 mb-2" for="mensagem_1">Mensagem 1</label>
+        <textarea id="mensagem_1" name="mensagem_1" rows="3"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 resize-none">{{ config.mensagem_1 }}</textarea>
+      </div>
+
+      <!-- Mensagem 2 -->
+      <div>
+        <label class="block text-lg font-semibold text-gray-700 mb-2" for="mensagem_2">Mensagem 2</label>
+        <textarea id="mensagem_2" name="mensagem_2" rows="3"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 resize-none">{{ config.mensagem_2 }}</textarea>
+      </div>
+
+      <!-- Mensagem 3 -->
+      <div>
+        <label class="block text-lg font-semibold text-gray-700 mb-2" for="mensagem_3">Mensagem 3</label>
+        <textarea id="mensagem_3" name="mensagem_3" rows="3"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 resize-none">{{ config.mensagem_3 }}</textarea>
+      </div>
+
+      <!-- Botão salvar -->
+      <div class="text-center mt-6">
+        <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center gap-2 shadow-md transition">
+          <i class="fas fa-save"></i> Salvar Todas as Alterações
+        </button>
+      </div>
+    </form>
+
+  </div>
+
+</body>
+</html>
